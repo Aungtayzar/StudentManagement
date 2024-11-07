@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\GenderController;
+use App\Http\Controllers\PaymenttypeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReligionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\StageController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TypesController;
-use App\Http\Controllers\RolesController;
-
+use App\Http\Controllers\WarehousesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +35,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('/statuses',StatusController::class);
+    Route::resource('/genders',GenderController::class);
+    Route::resource('/paymenttypes',PaymenttypeController::class);
     Route::resource('/roles',RolesController::class);
+    Route::resource('/religions',ReligionController::class);
+    Route::resource('/statuses',StatusController::class);
+    Route::resource('/stages',StageController::class);
     Route::resource('/types',TypesController::class);
+    Route::resource('/warehouses',WarehousesController::class);
+    
 });
 
 
