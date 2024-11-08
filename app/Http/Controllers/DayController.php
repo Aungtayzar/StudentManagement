@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\Gender;
-use App\Models\Status;
+use App\Models\Day;
 use Illuminate\Http\Request;
+use App\Models\Status;
 use Illuminate\Support\Str;
 
-class GenderController extends Controller
+class DayController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $genders = Gender::all();
+        $days = Day::all();
         $statuses = Status::whereIn('id',[1,4])->get();
-        return view('genders.index',compact('genders','statuses'));
+        return view('days.index',compact('days','statuses'));
     }
 
     /**
@@ -34,15 +37,15 @@ class GenderController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
 
-        $gender = new Gender();
-        $gender->name = $request['name'];
-        $gender->slug = Str::slug($request['name']);
-        $gender->status_id = $request['status_id'];
-        $gender->user_id = $user_id;
+        $day = new Day();
+        $day->name = $request['name'];
+        $day->slug = Str::slug($request['name']);
+        $day->status_id = $request['status_id'];
+        $day->user_id = $user_id;
 
-        $gender->save();
+        $day->save();
 
-        return redirect(route('genders.index'));
+        return redirect(route('days.index'));
     }
 
     /**
@@ -69,15 +72,15 @@ class GenderController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
 
-        $gender = Gender::findOrFail($id);
-        $gender->name = $request['name'];
-        $gender->slug = Str::slug($request['name']);
-        $gender->status_id = $request['status_id'];
-        $gender->user_id = $user_id;
+        $day = Day::findOrFail($id);
+        $day->name = $request['name'];
+        $day->slug = Str::slug($request['name']);
+        $day->status_id = $request['status_id'];
+        $day->user_id = $user_id;
 
-        $gender->save();
+        $day->save();
 
-        return redirect(route('genders.index'));
+        return redirect(route('days.index'));
     }
 
     /**
@@ -85,8 +88,8 @@ class GenderController extends Controller
      */
     public function destroy(string $id)
     {
-        $gender = Gender::findOrFail($id);
-        $gender->delete();
+        $day = Day::findOrFail($id);
+        $day->delete();
         return redirect()->back();
     }
 }

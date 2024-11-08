@@ -10,7 +10,7 @@
 
                         <div class="col-md-4 form-group">
                             <label for="name">Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" class="form-control form-control-sm rounded-0" placeholder="Enter Payment Name" />
+                            <input type="text" name="name" id="name" class="form-control form-control-sm rounded-0" placeholder="Enter Paymenttype Name" />
                         </div>
 
                         <div class="col-md-4 form-group">

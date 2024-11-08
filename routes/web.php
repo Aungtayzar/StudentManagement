@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DayController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\PaymenttypeController;
 use App\Http\Controllers\ProfileController;
@@ -35,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::resource('/categories',CategoryController::class);
+    Route::resource('/days',DayController::class);
     Route::resource('/genders',GenderController::class);
     Route::resource('/paymenttypes',PaymenttypeController::class);
     Route::resource('/roles',RolesController::class);

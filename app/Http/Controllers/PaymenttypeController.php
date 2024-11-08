@@ -85,8 +85,8 @@ class PaymenttypeController extends Controller
      */
     public function destroy(string $id)
     {
-        $religion = Paymenttype::findOrFail($id);
-        $religion->delete();
+        $paymenttype = Paymenttype::findOrFail($id);
+        $paymenttype->delete();
         return redirect()->back();
     }
 }

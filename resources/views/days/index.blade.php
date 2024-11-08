@@ -3,14 +3,14 @@
         <!-- Start Page Content Area  -->
         <div class="container-fluid">
             <div class="col-md-12">
-                <form action="{{route('genders.store')}}" method="POST">
+                <form action="{{route('days.store')}}" method="POST">
                     {{csrf_field()}}
                     {{-- @csrf  --}}
                     <div class="row align-items-end">
 
                         <div class="col-md-4 form-group">
                             <label for="name">Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" class="form-control form-control-sm rounded-0" placeholder="Enter Gender Name" />
+                            <input type="text" name="name" id="name" class="form-control form-control-sm rounded-0" placeholder="Enter Day Name" />
                         </div>
 
                         <div class="col-md-4 form-group">
@@ -76,21 +76,21 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($genders as $idx=>$gender)
+                            @foreach ($days as $idx=>$day)
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="singlechecks" class="form-check-input singlechecks" value="{{$gender->id}}">
+                                        <input type="checkbox" name="singlechecks" class="form-check-input singlechecks" value="{{$day->id}}">
                                     </td>
                                     <td>{{++$idx}}</td>
-                                    <td>{{$gender->name}}</td>
-                                    <td>{{$gender->status->name}}</td>
-                                    <td>{{$gender['user']['name']}}</td>
-                                    <td>{{$gender->created_at->format('d M Y')}}</td>
-                                    <td>{{$gender->updated_at->format('d M Y')}}</td>
+                                    <td>{{$day->name}}</td>
+                                    <td>{{$day->status->name}}</td>
+                                    <td>{{$day['user']['name']}}</td>
+                                    <td>{{$day->created_at->format('d M Y')}}</td>
+                                    <td>{{$day->updated_at->format('d M Y')}}</td>
                                     <td>
                                         <a href="javascript:void(0);" class="text-info "><i class="fas fa-pen"></i></a>
                                         <a href="javascript:void(0);" class="text-danger ms-2 delete-btn" data-idx={{$idx}}><i class="fas fa-trash-alt"></i></a>
-                                        <form id="formdelete-{{$idx}}" action="{{route('genders.destroy',$gender->id)}}" method="POST">
+                                        <form id="formdelete-{{$idx}}" action="{{route('days.destroy',$day->id)}}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                         </form>
