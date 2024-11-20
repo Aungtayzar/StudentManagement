@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class RolesController extends Controller
 {
@@ -15,6 +17,7 @@ class RolesController extends Controller
     public function index()
     {
         $roles = Role::all();
+        $statuses = Status::whereIn('id',[3,4])->get();
         return view('roles.index',compact('roles'));
     }
 
@@ -23,7 +26,8 @@ class RolesController extends Controller
      */
     public function create()
     {
-        //
+        $statuses = Status::whereIn('id',[3,4])->get();
+        return view('roles.create',compact('statuses'));
     }
 
     /**
@@ -37,8 +41,23 @@ class RolesController extends Controller
         $role = new Role();
         $role->name = $request['name'];
         $role->slug = Str::slug($request['name']);
-        // $role->status_id = $request['status_id'];
+        $role->status_id = $request['status_id'];
         $role->user_id = $user_id;
+
+        // Single Image Upload 
+        if(file_exists($request['image'])){
+            $file = $request['image'];
+            // dd($file);
+            $fname = $file->getClientOriginalName();
+            // dd($fname);//ser1.jpg
+            $imagenewname = uniqid($user_id).$role['id'].$fname;
+            // dd($imagenewname);
+            $file->move(public_path('assets/img/roles/'), $imagenewname);
+
+            $filepath = 'assets/img/roles/'.$imagenewname;
+            $role->image = $filepath;
+        }
+
 
         $role->save();
 
@@ -50,7 +69,8 @@ class RolesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        return view('roles.show',compact('role'));
     }
 
     /**
@@ -58,7 +78,9 @@ class RolesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $statuses = Status::whereIn('id',[3,4])->get();
+        return view('roles.edit')->with('role',$role)->with('statuses',$statuses);
     }
 
     /**
@@ -72,8 +94,35 @@ class RolesController extends Controller
         $role = Role::findOrFail($id);
         $role->name = $request['name'];
         $role->slug = Str::slug($request['name']);
-        // $role->status_id = $request['status_id'];
+        $role->status_id = $request['status_id'];
         $role->user_id = $user_id;
+
+
+
+        // Remove Old Single Image 
+        
+
+        if($request->hasFile('image')){
+            $path = $role->image;
+            if(File::exists($path)){
+                File::delete($path);
+            }
+        }
+
+        // Single Image Upload 
+        if(file_exists($request['image'])){
+            $file = $request['image'];
+            // dd($file);
+            $fname = $file->getClientOriginalName();
+            // dd($fname);//ser1.jpg
+            $imagenewname = uniqid($user_id).$role['id'].$fname;
+            // dd($imagenewname);
+            $file->move(public_path('assets/img/roles/'), $imagenewname);
+
+            $filepath = 'assets/img/roles/'.$imagenewname;
+            $role->image = $filepath;
+        }
+
 
         $role->save();
 
@@ -86,6 +135,14 @@ class RolesController extends Controller
     public function destroy(string $id)
     {
         $role = Role::findOrFail($id);
+
+        // Remove Old Single Image 
+        $path = $role->image;
+
+        if(File::exists($path)){
+            File::delete($path);
+        }
+
          $role->delete();
          return redirect()->back();
     }

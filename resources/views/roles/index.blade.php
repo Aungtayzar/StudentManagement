@@ -2,27 +2,12 @@
         @section('content')
         <!-- Start Page Content Area  -->
         <div class="container-fluid">
+            
             <div class="col-md-12">
-                <form action="{{route('roles.store')}}" method="POST">
-                    {{csrf_field()}}
-                    {{-- @csrf  --}}
-                    <div class="row align-items-end">
-                        <div class="col-md-6 form-group">
-                            <label for="name">Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" class="form-control form-control-sm rounded-0" placeholder="Enter Role Name" />
-                        </div>
-
-
-                        <div class="col-md-6">
-                            <button type="reset" class="btn btn-secondary btn-sm rounded-0">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
-                        </div>
-                    </div>
-                </form>
-
+                <a href="{{route('roles.create')}}" class="btn btn-primary btn-sm rounded-0">Create</a>
             </div>
 
-                <hr>
+            <hr/>
 
                 <div class="col-md-12">
                     <div class="row">
@@ -54,8 +39,8 @@
                                 </th>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>By</th>
                                 <th>Status</th>
+                                <th>By</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                                 <th>Action</th>
@@ -67,17 +52,17 @@
                                 <tr>
                                     <td>select</td>
                                     <td>{{++$idx}}</td>
-                                    <td>{{$role->name}}</td>
-                                    {{-- <td>{{$status->user['name']}}</td> --}}
+                                    <td><img src="{{asset($role->image)}}" class="rounded-circle me-2" width="20" height="20" alt=""><a href="{{route('roles.show',$role->id)}}">{{$role->name}}</a></td>
+                                    <td>{{$role['status']['name']}}</td>
                                     <td>{{$role['user']['name']}}</td>
-                                    <td></td>
                                     <td>{{$role->created_at->format('d M Y')}}</td>
                                     <td>{{$role->updated_at->format('d M Y')}}</td>
                                     <td>
-                                        <a href="javascript:void(0);" class="text-info"><i class="fas fa-pen"></i></a>
-                                        <a href="javascript:void(0);" class="text-danger ms-2"><i class="fas fa-trash-alt"></i></a>
-                                        <form action="">
-
+                                        <a href="{{route('roles.edit',$role->id)}}" class="text-info "><i class="fas fa-pen"></i></a>
+                                        <a href="javascript:void(0);" class="text-danger ms-2 delete-btn" data-idx={{$idx}}><i class="fas fa-trash-alt"></i></a>
+                                        <form id="formdelete-{{$idx}}" action="{{route('roles.destroy',$role->id)}}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
                                         </form>
                                     </td>
                                 </tr>
@@ -94,6 +79,36 @@
         @endsection 
 
         @section('scripts')
+        <script type="text/javascript">
+            
+            $(document).ready(function(){
+
+                //Single Delete
+
+                $('.delete-btn').click(function(){
+                    const getidx = $(this).data('idx');
+                    // console.log(getidx);
+
+                    if(confirm(`Are you sure you want to delete ${getidx}`)){
+                        $('#formdelete-'+getidx).submit();
+                        return true;
+                        
+                    }else{
+                        return false;
+                    }
+
+                });
+
+                 //Single Delete
+
+                //  Bulk Delete 
+                $('#selectalls').click(function(){
+                    $('.singlechecks').prop('checked',$(this).prop('checked'));
+                })
+
+                // Bulk Delete
+            })
+        </script>
         @endsection 
 
 
