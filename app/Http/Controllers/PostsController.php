@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class PostsController extends Controller
 {
@@ -11,7 +14,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::all();
+        return view('posts.index',compact('posts'));
     }
 
     /**
@@ -19,7 +23,11 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        $data['posts'] = Post::where('attshow',3)->orderBy('title','asc')->get();
+        $data['tags'] = User::orderBy('name','asc')->get();
+        $data['gettoday'] = Carbon::today()->format('Y-m-d');
+        // dd($data['gettoday']);
+        return view('posts.create',$data);
     }
 
     /**
@@ -59,6 +67,8 @@ class PostsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect()->back();
     }
 }

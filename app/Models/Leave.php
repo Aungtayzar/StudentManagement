@@ -22,11 +22,21 @@ class Leave extends Model
         'user_id'
     ];
 
-    public function stage(){
-        return $this->belongsTo(Stage::class);
+    public function post(){
+        return $this->belongsTo(Post::class);
     }
 
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+
+    public function stage(){
+        return $this->belongsTo(Stage::class);
+    }
+
+    public function tag(){
+        return $this->belongsTo(User::class);
+    }
+
 }

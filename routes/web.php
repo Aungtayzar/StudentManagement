@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\WarehousesController;
 
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/statuses',StatusController::class);
     Route::resource('/stages',StageController::class);
     Route::resource('/types',TypesController::class);
+    Route::resource('/tags',TagsController::class);
     Route::resource('/warehouses',WarehousesController::class);
     
 });
