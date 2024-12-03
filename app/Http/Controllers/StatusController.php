@@ -33,6 +33,10 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'name'=>'required|unique:statuses,name'
+        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
 

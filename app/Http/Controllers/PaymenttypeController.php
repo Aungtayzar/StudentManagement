@@ -31,6 +31,11 @@ class PaymenttypeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'name'=>'required',
+            'status_id'=>'required|in:1,4'
+        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
 

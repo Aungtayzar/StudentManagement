@@ -41,6 +41,15 @@ class LeavesController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'post_id'=>'required',
+            'startdate'=>'required|date',
+            'enddate'=>'required|date',
+            'tag'=>'required',
+            'title'=>'required|max:100',
+            'content'=>'required'
+        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
 

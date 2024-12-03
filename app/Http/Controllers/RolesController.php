@@ -35,6 +35,13 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->validate($request,[
+            'image'=>'image|mimes:jpg,jpeg,png|max:1024',
+            'name'=>'required|max:50|unique:roles,name',
+            'status_id'=>'required|in:3,4'
+        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
 

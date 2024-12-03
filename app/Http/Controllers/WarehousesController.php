@@ -33,6 +33,12 @@ class WarehousesController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->validate($request,[
+            'name'=>'required',
+            'status_id'=>'required|in:3,4'
+        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
 

@@ -10,16 +10,25 @@
 
                         <div class="col-md-3 form-group">
                             <label for="image">Image</label>
+                            @error('image')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
                             <input type="file" name="image" id="image" class="form-control form-control-sm rounded-0" placeholder="Enter image Name" />
                         </div>
 
                         <div class="col-md-3 form-group">
                             <label for="name">Name <span class="text-danger">*</span></label>
+                            @error('name')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
                             <input type="text" name="name" id="name" class="form-control form-control-sm rounded-0" placeholder="Enter Tag Name" />
                         </div>
 
                         <div class="col-md-3 form-group">
                             <label for="status_id">Status</label>
+                            @error('status_id')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
                             <select name="status_id" id="status_id" class="form-control form-control-sm rounded-0">
                                 @foreach ($statuses as $status)
 
