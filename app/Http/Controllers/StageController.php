@@ -46,7 +46,7 @@ class StageController extends Controller
         $stage->user_id = $user_id;
 
         $stage->save();
-
+        session()->flash("success","New Leave Created");
         return redirect(route('stages.index'));
     }
 
@@ -81,7 +81,7 @@ class StageController extends Controller
         $stage->user_id = $user_id;
 
         $stage->save();
-
+        session()->flash("success","Update Successfully");
         return redirect(route('stages.index'));
     }
 

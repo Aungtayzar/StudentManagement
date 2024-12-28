@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/posts',PostsController::class);
     Route::resource('/leaves',LeavesController::class);
+    Route::put('/leave/{id}/updatestage',[LeavesController::class, 'updatestage'])->name('leaves.updatestage');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

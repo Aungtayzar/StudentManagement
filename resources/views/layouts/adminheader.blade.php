@@ -3,7 +3,7 @@
     <head>
         <title>{{config('app.name')}}</title>
 
-         <!--link fav icon-->
+         {{--link fav icon--}}
          <link href="{{asset('assets/img/fav/favicon.png')}}" type="image/png" size="16x16" />
 
         <!--fontawesome cdn version 5.15.4-->
@@ -11,6 +11,9 @@
 
         <!--bootstrap css 1 version 5.3.0-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+        <!-- toastr notification css1 js1 -->
+        <link href="{{asset('assets/libs/toastr-master/build/toastr.min.css')}}" rel="stylesheet" type="text/css" />
 
         <!--Custom Css-->
         <link href="{{asset('assets/dist/css/style.css')}}" rel="stylesheet" type="text/css" />

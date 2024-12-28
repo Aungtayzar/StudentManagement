@@ -46,7 +46,7 @@ class ReligionController extends Controller
         $religion->user_id = $user_id;
 
         $religion->save();
-
+        session()->flash("success","New Leave Created");
         return redirect(route('religions.index'));
     }
 
@@ -81,7 +81,7 @@ class ReligionController extends Controller
         $religion->user_id = $user_id;
 
         $religion->save();
-
+        session()->flash("success","Update Successfully");
         return redirect(route('religions.index'));
     }
 
@@ -92,6 +92,7 @@ class ReligionController extends Controller
     {
         $religion = Religion::findOrFail($id);
         $religion->delete();
+        session()->flash("info","Delete Successfully");
         return redirect()->back();
     }
 }

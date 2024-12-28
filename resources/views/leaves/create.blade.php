@@ -11,9 +11,13 @@
 
                         <div class="col-md-4">
                             <div class="row">
-                                <div class="col-md-12 form-group mb-3">
-                                    <label for="image">Image</label>
-                                    <input type="file" name="image" id="image" class="form-control form-control-sm rounded-0" placeholder="Enter image Name" />
+                                
+                                <div class="col-md-12 form-group">                                   
+                                               
+                                    <label for="images" class="gallery">
+                                         <span>Choose Images</span>
+                                    </label>
+                                    <input type="file" name="images[]" id="images" class="form-control form-control-sm rounded-0" hidden multiple />
                                 </div>
 
                                 <div class="col-md-6 form-group mb-3">
@@ -50,10 +54,9 @@
                                     @error('post_id')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
-                                    <select name="post_id" id="post_id" class="form-select form-select-sm rounded-0">
-                                        <option selected disabled>Choose Class</option>
-                                        @foreach ($posts as $post)   
-                                            <option value="{{$post['id']}}" {{old('post_id') == $post->id ? 'selected':''}}>{{$post['title']}}</option>   
+                                    <select name="post_id[]" id="post_id" class="form-select form-select-sm rounded-0" multiple="multiple">
+                                        @foreach ($posts as $id=>$title)   
+                                            <option value="{{$id}}" {{old('post_id') == $id ? 'selected':''}}>{{$title}}</option>   
                                         @endforeach
                                     </select>
                                 </div>
@@ -63,8 +66,8 @@
                                     @error('tag')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
-                                    <select name="tag" id="tag" class="form-select form-select-sm rounded-0">
-                                        <option selected disabled>Choose authorize person</option>
+                                    <select name="tag[]" id="tag" class="form-select form-select-sm rounded-0" multiple="multiple">
+                                        
                                         @foreach ($tags as $tag)
         
                                             <option value="{{$tag['id']}}" {{old('tag') == $tag->id ? 'selected':''}}>{{$tag['name']}}</option>
@@ -103,9 +106,129 @@
         @endsection 
 
         @section('css')
+        <link href="{{asset('assets/libs/select2-develop/dist/css/select2.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('assets/libs/summernote-0.8.18-dist/summernote-lite.min.css')}}" rel="stylesheet">
+        <link href="{{asset('assets/libs/flatpickr/flatpickr.min.css')}}" rel="stylesheet">
+        
+
+        <style>
+            /* Start Gallery  */
+            .gallery{
+                width: 100%;
+                background-color: #eee;
+                color: #000;
+    
+                text-align: center;
+                padding: 10px;
+            }
+    
+            .gallery img{
+                width: 100%;
+                height: 100px;
+                border: 2px dashed #aaa;
+                border-radius: 10px;
+                object-fit: cover;
+    
+                padding: 5px;
+                margin: 0 5px;
+            }
+    
+            .gallery.removetxt span{
+                display: none;
+            }
+
+            /* End Gallery  */
+    
+        </style>
+
         @endsection 
 
         @section('scripts')
+        <script src="{{asset('assets/libs/select2-develop/dist/js/select2.min.js')}}"></script>
+        <script src="{{asset('assets/libs/summernote-0.8.18-dist/summernote-lite.min.js')}}"></script>
+        <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
+        
+
+        <script>
+            
+            $(document).ready(function() {
+                $('#tag').select2({
+                    placeholder:"Choose Authorize person"
+                });
+
+                $('#post_id').select2({
+                    placeholder:"Choose Class"
+                });
+
+                $('#content').summernote({
+                    placeholder: 'Say Something...',
+                    height: 120,
+                    toolbar: [
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link']],
+                    ],
+                });
+
+                console.log("Summernote initialized.");
+
+                $('#startdate,#enddate').flatpickr({
+                    dateFormat:"Y-m-d",
+                    minDate:"today",
+                    maxDate:new Date().fp_incr(30)
+                });
+
+                console.log("Flatpickr initialized.");
+
+
+                 // Start Multi Profile Preview
+    
+                 var previewimages = function(input,output){
+                    // console.log(input,output);
+    
+                    if(input.files){
+                        var totalfiles = input.files.length;
+                        console.log(totalfiles);
+    
+                        if(totalfiles > 0){
+                            $(".gallery").addClass('removetxt');
+                        }else{
+                            $('.gallery').removeClass('removetxt');
+                        }
+    
+                        for(var i = 0; i< totalfiles; i++){
+    
+                            // console.log(i);
+    
+                            var filereader = new FileReader();
+    
+                            filereader.onload = function(e){
+                                $($.parseHTML('<img>')).attr('src',e.target.result).appendTo(output);
+                            }
+    
+                            filereader.readAsDataURL(input.files[i]);
+                        }
+    
+                           
+                    }   
+    
+    
+                }
+    
+                
+                $('#images').change(function(){
+                    previewimages(this,'label.gallery');
+                });
+    
+                 // End Multi Profile Preview
+
+
+             });
+
+             
+        </script>
+        
         @endsection 
 
 

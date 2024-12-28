@@ -92,7 +92,7 @@ class PostsController extends Controller
 
 
         $post->save();
-
+        session()->flash("success","New Leave Created");
         return redirect(route('posts.index'));
         
 
@@ -166,7 +166,7 @@ class PostsController extends Controller
 
 
         $post->save();
-
+        session()->flash("success","Update Successfully");
         return redirect(route('posts.index'));
     }
 
@@ -177,6 +177,7 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
         $post->delete();
+        session()->flash("info","Delete Successfully");
         return redirect()->back();
     }
 }

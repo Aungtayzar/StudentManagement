@@ -12,10 +12,13 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12 form-group mb-3">
-                                    <label for="image" class="gallery">
+                                    <label for="images" class="gallery">
 
-                                        @if($leave->image)
-                                            <img src="{{asset($leave->image)}}" alt="{{$leave->slug}}" class="img-thumbnail" width="100" height="100" />
+                                        @if(!empty($leavefiles) && $leavefiles->count() > 0)
+                                            @foreach ($leavefiles as $leavefile)
+                                            <img src="{{asset($leavefile->image)}}" alt="{{$leavefile->id}}" class="img-thumbnail" width="100" height="100" />
+                                            @endforeach
+                                            
         
                                         @else
                                         <span>Choose Images</span>
@@ -23,7 +26,7 @@
         
         
                                     </label>
-                                    <input type="file" name="image" id="image" class="form-control form-control-sm rounded-0" hidden />
+                                    <input type="file" name="images[]" id="images" class="form-control form-control-sm rounded-0" hidden multiple />
                                 </div>
 
                                 <div class="col-md-6 form-group mb-3">
@@ -48,14 +51,11 @@
                                   
                                 <div class="col-md-6 form-group mb-3">
                                     <label for="post_id">Class <span class="text-danger">*</span></label>
-                                    <select name="post_id" id="post_id" class="form-select form-select-sm rounded-0">
-                                        @foreach ($posts as $post)
+                                    <select name="post_id[]" id="post_id" class="form-select form-select-sm rounded-0" multiple>
+                                        {{-- Coalescing Operator  --}}
+                                        @foreach ($posts as $id=>$title)
 
-                                            <option value="{{$post['id']}}"
-                                                @if($post['id']===$leave['post_id'])
-                                                    selected
-                                                @endif
-                                            >{{$post['title']}}</option>
+                                            <option value="{{$id}}" {{in_array($id,json_decode($leave->post_id,true) ?? []) ? 'selected' : ''}}>{{$title}}</option>
 
                                         @endforeach
                                     </select>
@@ -63,14 +63,10 @@
         
                                 <div class="col-md-6 form-group mb-3">
                                     <label for="tag">Tag <span class="text-danger">*</span></label>
-                                    <select name="tag" id="tag" class="form-select form-select-sm rounded-0">
-                                        @foreach ($tags as $tag)
+                                    <select name="tag[]" id="tag" class="form-select form-select-sm rounded-0" multiple>
+                                        @foreach ($tags as $id=>$name)
 
-                                            <option value="{{$tag['id']}}"
-                                                @if($tag['id']===$leave['tag_id'])
-                                                    selected
-                                                @endif
-                                            >{{$tag['name']}}</option>
+                                            <option value="{{$id}}" {{in_array($id,json_decode($leave->tag) ?? []) ? 'selected' : ''}}>{{$name}}</option>
 
                                         @endforeach
                                     </select>
@@ -101,6 +97,9 @@
         @endsection 
 
         @section('css')
+        <link href="{{asset('assets/libs/select2-develop/dist/css/select2.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('assets/libs/summernote-0.8.18-dist/summernote-lite.min.css')}}" rel="stylesheet">
+        <link href="{{asset('assets/libs/flatpickr/flatpickr.min.css')}}" rel="stylesheet">
             <style>
         .gallery{
             width: 100%;
@@ -130,10 +129,42 @@
         @endsection 
 
         @section('scripts')
+        <script src="{{asset('assets/libs/select2-develop/dist/js/select2.min.js')}}"></script>
+        <script src="{{asset('assets/libs/summernote-0.8.18-dist/summernote-lite.min.js')}}"></script>
+        <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
         <script>
             $(document).ready(function(){
 
-                // Start Single Profile Preview
+                $('#tag').select2({
+                    placeholder:"Choose Authorize person"
+                });
+
+                $('#post_id').select2({
+                    placeholder:"Choose Class"
+                });
+
+                $('#content').summernote({
+                    placeholder: 'Say Something...',
+                    height: 120,
+                    toolbar: [
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link']],
+                    ],
+                });
+
+                console.log("Summernote initialized.");
+
+                $('#startdate,#enddate').flatpickr({
+                    dateFormat:"Y-m-d",
+                    minDate:"today",
+                    maxDate:new Date().fp_incr(30)
+                });
+
+                console.log("Flatpickr initialized.");
+
+                // Start Multi Profile Preview
     
                 var previewimages = function(input,output){
                     // console.log(input,output);
@@ -155,7 +186,6 @@
                             var filereader = new FileReader();
     
                             filereader.onload = function(e){
-                                $(output).html("")
                                 $($.parseHTML('<img>')).attr('src',e.target.result).appendTo(output);
                             }
     
@@ -169,11 +199,11 @@
                 }
     
                 
-                $('#image').change(function(){
+                $('#images').change(function(){
                     previewimages(this,'label.gallery');
                 });
     
-                 // End Single Profile Preview
+                 // End Multi Profile Preview
                 
     
               
