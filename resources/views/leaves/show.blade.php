@@ -98,6 +98,7 @@
                     <ul class="nav"> 
                         <li class="nav-item">
                             <button type="button" id="autoclick" class="tablinks active" onclick="gettab(event,'contenttab')">Content</button>
+                            <button type="button" class="tablinks" onclick="gettab(event,'leavetab')">Leaves</button>
                         </li>
                         
                     </ul>
@@ -121,6 +122,45 @@
                              @endif
                 
                         </div>
+
+                        <div id="leavetab" class="tab-pane">
+                            <table id="mytable" class="table table-sm table-hover border">
+                                <thead>
+                                    <tr>
+                            
+                                        <th>No</th>
+                                        <th>Title</th>
+                                        <th>Tag</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>By</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        
+                                    </tr>
+                                </thead>
+        
+                                <tbody>
+                                    @foreach ($allleaves as $idx=>$allleave)
+                                        <tr>
+                                            <td>{{++$idx}}</td>
+                                            <td><a href="{{route('leaves.show',$allleave->id)}}">{{Str::limit($allleave->title,20)}}</a></td>   
+                                            <td>
+                                                {{$allleave->maptagtonames($users)}}
+                                            </td>                         
+                                            <td>{{$allleave->startdate}}</td>
+                                            <td>{{$allleave->enddate}}</td>
+                                            <td>{{$allleave['stage']['name']}}</td>
+                                            <td>{{$allleave['user']['name']}}</td>
+                                            <td>{{$allleave->created_at->format('d M Y')}}</td>
+                                            <td>{{$allleave->updated_at->format('d M Y')}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                
+                        </div>
                                
                         
                     </div>
@@ -132,7 +172,7 @@
                 <div class="card border-0 rounded-0 shadow mb-4">
                     <ul class="nav"> 
                         <li class="nav-item">
-                            <button type="button" id="autoclick" class="tablinks active" onclick="gettab(event,'authorizationtag')">Authorization</button>
+                            <button type="button" class="tablinks active" onclick="gettab(event,'authorizationtag')">Authorization</button>
                         </li>
                         
                     </ul>

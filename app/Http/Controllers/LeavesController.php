@@ -9,11 +9,13 @@ use App\Models\Post;
 use App\Models\Stage;
 use App\Models\Tag;
 use App\Models\User;
+use App\Notifications\LeaveTagPersonNotify;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification;
 
 class LeavesController extends Controller
 {
@@ -89,6 +91,12 @@ class LeavesController extends Controller
             }
         }
 
+        // =>Database Notification to multi tag users 
+        $tags = $request['tag'];
+        $tagpersons = User::whereIn('id',$tags)->get();//fetch all users at one
+        Notification::send($tagpersons,new LeaveTagPersonNotify($leave->id,$leave->title,$leave->user_id));
+
+
         session()->flash("success","New Leave Created");
 
 
@@ -104,7 +112,8 @@ class LeavesController extends Controller
         $users = User::pluck('name','id');
         $leavefiles = LeaveFile::where("leave_id",$id)->get();
         $stages = Stage::whereIn('id',[1,2,3])->where('status_id',3)->get();
-        return view('leaves.show',["leave"=>$leave,"leavefiles"=>$leavefiles,"users"=>$users,"stages"=>$stages]);
+        $allleaves = Leave::where('user_id',$leave->user_id)->orderBy('created_at','desc')->get();
+        return view('leaves.show',["leave"=>$leave,"leavefiles"=>$leavefiles,"users"=>$users,"stages"=>$stages,"allleaves"=>$allleaves]);
     }
 
     /**
