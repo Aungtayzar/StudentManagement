@@ -3,6 +3,7 @@
     <head>
         <title>{{config('app.name')}}</title>
 
+        {{-- //8-bit Unicode Transformation Format  --}}
         <meta charset="utf-8" />
 
          {{--link fav icon--}}

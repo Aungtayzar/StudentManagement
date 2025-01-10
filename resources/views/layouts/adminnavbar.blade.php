@@ -125,7 +125,14 @@
                             <a href="javascript:void(0);" class="dropdown-item"><i class="fas fa-user fa-sm text-muted me-2"></i> Settings</a>
                             <a href="javascript:void(0);" class="dropdown-item"><i class="fas fa-user fa-sm text-muted me-2"></i> Activity Log</a>
                             <div class="dropdown-divider"></div>
-                            <a href="javascript:void(0);" class="dropdown-item"><i class="fas fa-user fa-sm text-muted me-2"></i> Logout</a>
+
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+
+                                <a href="javascript:void(0);" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item"><i class="fas fa-user fa-sm text-muted me-2"></i> Logout</a>
+                            </form>
+                            
                         </div>
 
                     </li>

@@ -1,47 +1,83 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@include('layouts.auth.authheader')
+<div id="app">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    {{-- Page Wrapper  --}}
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <section class="vh-100 d-flex justify-content-center align-items-center">
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div class="col-3 bg-white p-4">
+                <h5 class="mb-3">Sign In</h5>
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+            
+                    <!-- Email Address -->
+                    <div class="form-group mb-3">
+                        
+                        <input id="email" class="form-control form-control-sm rounded-0 @error('email') is-invalide @enderror" type="email" name="email" autofocus value="{{old('email')}}" placeholder="Username"/>
+                       {{-- @error('email')
+                       <span class="invalid-feedback"><strong>{{$message}}</strong></span>
+                       @enderror --}}
+                    </div>
+            
+                    <!-- Password -->
+                    <div class="form-group mb-3">
+                        
+                        <input id="password" class="form-control form-control-sm rounded-0 @error('password') is-invalide @enderror" type="password" name="password" value="{{old('password')}}" placeholder="Password"/>
+                       {{-- @error('email')
+                       <span class="invalid-feedback"><strong>{{$message}}</strong></span>
+                       @enderror --}}
+                    </div>
+            
+                    <!-- Remember Me -->
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+                    <div class="form-group mb-3">
+                        <div class="d-flex">
+                            <div class="form-check">
+                                <input id="remember_me" class="form-check-input" name="remember" {{old('remember') ? 'checked' : ''}} type="checkbox"/>
+                                <label for="remember_me">Remember Me</label>
+                            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+                            <div class="ms-auto">
+                                <a href="{{ route('password.request') }}"><i class="fas fa-lock me-1"></i>Forgot Password ? </a>
+                            </div>
+                        </div>                   
+                    </div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-info rounded-0">Log In</button>
+                    </div>
+                </form>
+
+                {{-- boostrap loader  --}}
+                <div></div>
+
+                {{-- social login  --}}
+                <div class="row">
+                    <small class="text-center text-muted mt-3">Sign in with</small>
+                    <div class="col-12 text-center mt-2">
+                        <a href="javascript:void(0);" class="btn" title="Login with Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="javascript:void(0);" class="btn" title="Login with Google"><i class="fab fa-google"></i></a>
+                        <a href="javascript:void(0);" class="btn" title="Login with Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="javascript:void(0);" class="btn" title="Login with GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+
+                {{-- login link  --}}
+                <div class="row">
+                    <div class="col-12 text-center mt-2">
+                        <small>Don't have an account ? <a href="{{route('register')}}" class="text-primary ms-1">Sign Up!</a></small>
+                    </div>
+                </div>
+
+            </div>
+            
+        </section>
+
+    {{-- Page Wrapper  --}}
+
+</div>  
+@include('layouts.auth.authfooter')
+
