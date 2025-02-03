@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PaymenttypeController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RelativesController;
 use App\Http\Controllers\ReligionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolesController;
@@ -15,6 +18,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\WarehousesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +42,8 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::resource('/posts',PostsController::class);
+    Route::resource('/relatives',RelativesController::class);
+    Route::resource('/contacts',ContactsController::class);
     Route::resource('/leaves',LeavesController::class);
     Route::put('/leave/{id}/updatestage',[LeavesController::class, 'updatestage'])->name('leaves.updatestage');
 
@@ -56,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/types',TypesController::class);
     Route::resource('/tags',TagsController::class);
     Route::resource('/warehouses',WarehousesController::class);
+    Route::resource('/announcements',AnnouncementsController::class);
     
 });
 

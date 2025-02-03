@@ -48,3 +48,6 @@ class LeaveTagPersonNotify extends Notification
         ];
     }
 }
+
+//php artisan make:notification LeaveTagPersonNotify
+//php artisan make:notification AnnouncementEmailNotify
