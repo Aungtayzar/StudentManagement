@@ -7,22 +7,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AnnouncementEmailNotify extends Notification
+class ContactEmailNotify extends Notification
 {
     use Queueable;
-
-    public $annid;
-    public $title;
-    public $content;
+    private $datas;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($id,$title,$content)
+    public function __construct($datas)
     {
-        $this->annid = $id;
-        $this->title = $title;
-        $this->content = $content;
+        $this->datas = $datas;
     }
 
     /**
@@ -41,11 +36,11 @@ class AnnouncementEmailNotify extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->greeting("New Announcement Coming")
-                    ->line($this->title)
-                    ->line($this->content)
-                    ->action('Visit Site', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->greeting("New Contact Created")
+                    ->line("Full Name : ".$this->datas['firstname']. " ". $this->datas['lastname'] )
+                    ->line("Birth Day : ".$this->datas['birthday'])
+                    ->line("Relative : ".$this->datas['relative'])
+                    ->action('Visit Site', url('/'));
     }
 
     /**
@@ -53,14 +48,11 @@ class AnnouncementEmailNotify extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            'id'=>$this->annid,
-            'title'=>$this->title,
-            'content'=>$this->content
-        ];
-    }
+    // public function toArray(object $notifiable): array
+    // {
+    //     return [
+    //         //
+    //     ];
+    // }
 }
-
-// php artisan make:notification AnnouncementEmailNotify 
+// php artisan make:notification ContactEmailNotify 

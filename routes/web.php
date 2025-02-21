@@ -43,7 +43,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/posts',PostsController::class);
     Route::resource('/relatives',RelativesController::class);
+    
+    Route::delete('/contactsbulkdeletes',[ContactsController::class,'bulkdeletes'])->name("contacts.bulkdeletes");
     Route::resource('/contacts',ContactsController::class);
+
     Route::resource('/leaves',LeavesController::class);
     Route::put('/leave/{id}/updatestage',[LeavesController::class, 'updatestage'])->name('leaves.updatestage');
 
