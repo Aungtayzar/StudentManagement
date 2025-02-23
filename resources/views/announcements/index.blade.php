@@ -11,16 +11,28 @@
 
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-2 mb-2"><a href="javascript:void(0);" id="bulkdelete-btn" class="btn btn-danger btn-sm rounded-0">Bulk Delete</a></div>
+                        <div class="col-md-6 mb-2"><a href="javascript:void(0);" id="bulkdelete-btn" class="btn btn-danger btn-sm rounded-0">Bulk Delete</a></div>
 
-                        <div class="col-md-10 mb-2">
-                            <form action="" method="">
+                        <div class="col-md-6">
+                            <form action="{{route('announcements.index')}}" method="GET">
                             {{csrf_field()}}
                             {{-- @csrf  --}}
                                 <div class="row justify-content-end">
-                                    <div class="col-md-2 col-sm-6 mb-2">
+                                    <div class="col-md-4 col-sm-4 mb-2">
+                                        <div class="form-group">
+                                            <select name="statusfilter" id="statusfilter" class="form-select form-select-sm rounded-0">
+                                                <option selected disabled>Choose Status</option>
+                                                @foreach($statuses as $status)
+                                                <option value="{{$status->id}}" {{request('statusfilter') == $status->id ? 'selected': ''}}>{{$status->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-8 mb-2">
                                         <div class="input-group">
-                                            <input type="text" name="filtername" id="filtername" class="form-control form-control-sm rounded-0" placeholder="Search...." />
+                                            <input type="text" name="namefilter" id="namefilter" class="form-control form-control-sm rounded-0" placeholder="Search...." />
+                                            <a href="{{route('announcements.index')}}" id="btn-clear" class="btn btn-secondary btn-sm"><i class="fas fa-sync"></i></a>
                                             <button type="submit" id="search-btn" class="btn btn-secondary btn-sm"><i class="fas fa-search"></i></button>
                                         </div>
                                     </div>
@@ -39,6 +51,7 @@
                                 </th>
                                 <th>No</th>
                                 <th>Title</th>
+                                <th>Status</th>
                                 <th>By</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
@@ -48,10 +61,19 @@
 
                         <tbody>
                             @foreach ($announcements as $idx=>$announcement)
-                                <tr>
-                                    <td>select</td>
-                                    <td>{{++$idx}}</td>
+                                <tr id="delete_{{$announcement->id}}">
+                                    <td>
+                                        <input type="checkbox" name="singlechecks" class="form-check-input singlechecks" value="{{$announcement->id}}">
+                                    </td>
+                                    <td>{{$idx+ $announcements->firstItem()}}</td>
+
+                                    {{-- (1-1) x 5 + 0 + 1 --}}
+                                        {{-- 0 + 0 + 1 --}}
+                                        {{-- 1 --}}
+
+                                    {{-- <td>{{($announcements->currentPage() - 1) * $announcements->perPage() + $idx + 1}}</td> --}}
                                     <td><a href="{{route('announcements.show',$announcement->id)}}">{{Str::limit($announcement->title,20)}}</a></td>                           
+                                    <td>{{$announcement['status']['name']}}</td>
                                     <td>{{$announcement['user']['name']}}</td>
                                     <td>{{$announcement->created_at->format('d M Y')}}</td>
                                     <td>{{$announcement->updated_at->format('d M Y')}}</td>
@@ -67,6 +89,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{$announcements->links('pagination::bootstrap-5')}}
                 </div>
         </div>
         <!-- End Page Content Area  -->
@@ -100,9 +123,59 @@
                  //Single Delete
 
                 //  Bulk Delete 
+                $('#bulkdelete-btn').hide();
                 $('#selectalls').click(function(){
                     $('.singlechecks').prop('checked',$(this).prop('checked'));
-                })
+                    togglebulkdeletebtn();
+                });
+
+                $(document).on('change','.singlechecks',function(){
+                    togglebulkdeletebtn();
+                });
+
+                function togglebulkdeletebtn(){
+                    let selectedcount = $('.singlechecks:checked').length;
+                    if(selectedcount > 0){
+                        $('#bulkdelete-btn').show();
+                    }else{
+                        $('#bulkdelete-btn').hide();
+                    }
+                }
+
+                $('#bulkdelete-btn').click(function(){
+                    let getselectedids = [];
+
+                    $("input:checkbox[name='singlechecks']:checked").each(function(){
+                        getselectedids.push($(this).val());
+                    });
+
+                    // console.log(getselectedids);
+
+                    $.ajax({
+                        url:'{{route("announcements.bulkdeletes")}}',
+                        type:"DELETE",
+                        dataType:"json",
+                        data:{
+                            selectedids:getselectedids,
+                            _token:'{{csrf_token()}}'
+                        },
+                        success:function(response){
+                            // console.log(response);
+
+                            if(response){
+                                // ui remove 
+                                $.each(getselectedids,function(key,value){
+                                    $(`#delete_${value}`).remove();
+                                })
+                            }
+                        },
+                        error:function(response){
+                            console.log("Error : ",response);
+                        }
+                    });
+
+                    
+                });
 
                 // Bulk Delete
             })

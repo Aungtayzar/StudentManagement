@@ -43,6 +43,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/posts',PostsController::class);
     Route::resource('/relatives',RelativesController::class);
+
+    
+    Route::delete('/announcementsbulkdeletes',[AnnouncementsController::class,'bulkdeletes'])->name("announcements.bulkdeletes");
+    Route::resource('/announcements',AnnouncementsController::class);
     
     Route::delete('/contactsbulkdeletes',[ContactsController::class,'bulkdeletes'])->name("contacts.bulkdeletes");
     Route::resource('/contacts',ContactsController::class);
@@ -65,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/types',TypesController::class);
     Route::resource('/tags',TagsController::class);
     Route::resource('/warehouses',WarehousesController::class);
-    Route::resource('/announcements',AnnouncementsController::class);
+
     
 });
 

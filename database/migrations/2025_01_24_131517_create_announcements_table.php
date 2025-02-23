@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->longText('content');
             $table->json('post_id')->nullable();
+            $table->unsignedBigInteger('status_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });

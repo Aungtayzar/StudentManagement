@@ -7,21 +7,42 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Announcement;
 use App\Models\Post;
+use App\Models\Status;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Notifications\AnnouncementEmailNotify;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Response;
+use Exception;
 
 class AnnouncementsController extends Controller
 {
      /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $announcements = Announcement::all();
-        return view('announcements.index',compact('announcements'));
+        // $announcements = Announcement::paginate(5);
+
+        $statusfilter = $request->input('statusfilter');
+        $namefilter = $request['namefilter'];
+
+        $query = Announcement::query();
+
+        if($statusfilter){
+            $query->where('status_id',$statusfilter);
+        }
+
+        if($namefilter){
+            $query->where('title','like','%'.$namefilter.'%');
+        }
+
+        $announcements = $query->paginate(5)->appends($request->except('page'));
+
+        $statuses = Status::whereIn('id',[3,4])->get();
+        return view('announcements.index',compact('announcements','statuses'));
     }
 
     /**
@@ -171,5 +192,16 @@ class AnnouncementsController extends Controller
          $announcement->delete();
          session()->flash("info","Delete Successfully");
          return redirect()->back();
+    }
+
+    public function bulkdeletes(Request $request){
+        try{
+            $getselectedids = $request->selectedids;
+            Announcement::whereIn('id',$getselectedids)->delete();
+            return Response::json(["success"=>"Selected data have been deleted successfully."]);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            return response()->json(["status"=>"Failed.","message"=>$e->getMessage()]);
+        }
     }
 }

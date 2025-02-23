@@ -12,7 +12,7 @@
                         <div class="col-md-2 mb-2"><a href="javascript:void(0);" id="bulkdelete-btn" class="btn btn-danger btn-sm rounded-0">Bulk Delete</a></div>
 
                         <div class="col-md-10 mb-2">
-                            <form action="" method="">
+                            <form action="{{route('')}}" method="GET">
                             {{csrf_field()}}
                             {{-- @csrf  --}}
                                 <div class="row justify-content-end">

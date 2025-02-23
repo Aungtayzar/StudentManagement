@@ -16,11 +16,16 @@ class Announcement extends Model
         'title',
         'content',
         'post_id',
+        'status_id',
         'user_id'
     ];
 
     public function post(){
         return $this->belongsTo(Post::class);
+    }
+
+    public function status(){
+        return $this->belongsTo(Status::class);
     }
 
     public function user(){
