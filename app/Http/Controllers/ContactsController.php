@@ -15,9 +15,17 @@ use Illuminate\Support\Facades\Notification;
 
 class ContactsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contacts = Contact::all();
+        $filtername = $request['filtername'];
+
+        $query = Contact::query();
+
+        if($filtername){
+            $query->where('firstname','like','%'.$filtername.'%')->orWhere('lastname','like','%'.$filtername.'%');
+        }
+
+        $contacts = $query->paginate(5)->appends($request->except('page'));
         $genders = Gender::pluck('name','id');
         $relatives = Relative::pluck('name','id')->prepend("Choose Relative","");
         return view('contacts.index',compact('contacts','relatives','genders'));

@@ -171,7 +171,7 @@
                     ],
                 });
 
-                console.log("Summernote initialized.");
+                // console.log("Summernote initialized.");
 
                 $('#startdate,#enddate').flatpickr({
                     dateFormat:"Y-m-d",

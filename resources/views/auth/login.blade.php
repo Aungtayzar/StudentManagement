@@ -8,14 +8,14 @@
 
 
             <div class="col-3 bg-white p-4">
-                <h5 class="mb-3">Sign In</h5>
+                <h6 class="mb-3">Sign In</h6>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
             
                     <!-- Email Address -->
                     <div class="form-group mb-3">
                         
-                        <input id="email" class="form-control form-control-sm rounded-0 @error('email') is-invalide @enderror" type="email" name="email" autofocus value="{{old('email')}}" placeholder="Username"/>
+                        <input id="email" class="form-control form-control-sm rounded-0 @error('email') is-invalide @enderror" type="email" name="email" autofocus value="{{old('email')}}" placeholder="Email"/>
                        {{-- @error('email')
                        <span class="invalid-feedback"><strong>{{$message}}</strong></span>
                        @enderror --}}

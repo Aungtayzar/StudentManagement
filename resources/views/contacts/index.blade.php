@@ -12,13 +12,14 @@
                         <div class="col-md-2 mb-2"><a href="javascript:void(0);" id="bulkdelete-btn" class="btn btn-danger btn-sm rounded-0">Bulk Delete</a></div>
 
                         <div class="col-md-10 mb-2">
-                            <form action="{{route('')}}" method="GET">
+                            <form action="{{ route('contacts.index') }}" method="GET">
                             {{csrf_field()}}
                             {{-- @csrf  --}}
                                 <div class="row justify-content-end">
                                     <div class="col-md-2 col-sm-6 mb-2">
                                         <div class="input-group">
                                             <input type="text" name="filtername" id="filtername" class="form-control form-control-sm rounded-0" placeholder="Search...." />
+                                            <a href="{{route('contacts.index')}}" id="btn-clear" class="btn btn-secondary btn-sm"><i class="fas fa-sync"></i></a>
                                             <button type="submit" id="search-btn" class="btn btn-secondary btn-sm"><i class="fas fa-search"></i></button>
                                         </div>
                                     </div>
