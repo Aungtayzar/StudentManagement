@@ -1,39 +1,51 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@extends('layouts.auth.authheader')
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+{{-- start reactjs or vuejs  --}}
+<div id="app">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    {{-- Page Wrapper  --}}
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <div class="vh-100 d-flex justify-content-center align-items-center">
+                    <div class="col-3 bg-white p-4">
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+                        {{-- start inner content area  --}}
+                      <h6>New Password!</h6>
+                      <div class="row">                      
+                        
+                        <form class="mt-3" method="POST" action="{{ route('password.store') }}">
+                            @csrf
+                            <!-- Password Reset Token -->
+                            <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+                            <div class="form-group mb-3">
+                                <input type="email" id="email" name="email" class="form-control form-control-sm rounded-0" :value="old('email', $request->email)" placeholder="Enter your eamil"/>
+                            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+                            <div class="form-group mb-3">
+                                <input type="password" id="password" name="password" class="form-control form-control-sm rounded-0" :value="old('password')" autofocus placeholder="Enter your Password"/>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control form-control-sm rounded-0" :value="old('password_confirmation')" autofocus placeholder="Enter your Password"/>
+                            </div>
+                                           
+                            <div class="d-grid">
+                                <button type="submit" id="submitbtn" class="btn btn-info rounded-0">Reset Password</button>
+                            </div>
+                        </form>
+                      </div>
+
+                      {{-- end inner content area  --}}
+
+            
+
+                    </div>
+            </div>
+            
+    {{-- Page Wrapper  --}}
+
+</div>  
+{{-- end reactjs or vuejs  --}}    
+
+@extends('layouts.auth.authfooter')

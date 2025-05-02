@@ -1,6 +1,7 @@
-@include('layouts.auth.authheader')
+@extends('layouts.auth.authheader')
 
-
+    @section('caption','Access')
+    @section('content')
      <form id="stepform" class="mt-3" method="POST" action="{{ route('register.storestep1') }}">
                     @csrf
             
@@ -26,10 +27,7 @@
         </form>
 
                
-
-
-
-@include('layouts.auth.authfooter')
+@endsection
 
 
 
