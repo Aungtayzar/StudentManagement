@@ -51,3 +51,4 @@
 {{-- end reactjs or vuejs  --}}    
 
 @extends('layouts.auth.authfooter')
+
