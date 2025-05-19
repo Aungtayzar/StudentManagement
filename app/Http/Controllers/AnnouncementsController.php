@@ -40,7 +40,6 @@ class AnnouncementsController extends Controller
         }
 
         $announcements = $query->paginate(5)->appends($request->except('page'));
-
         $statuses = Status::whereIn('id',[3,4])->get();
         return view('announcements.index',compact('announcements','statuses'));
     }

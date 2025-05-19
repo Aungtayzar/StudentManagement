@@ -2,13 +2,16 @@
 
 use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PaymenttypeController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegionsController;
 use App\Http\Controllers\RelativesController;
 use App\Http\Controllers\ReligionController;
 use Illuminate\Support\Facades\Route;
@@ -16,9 +19,10 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TagsController;
+use App\Http\Controllers\TownshipsController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\WarehousesController;
-
+use App\Models\Township;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +60,18 @@ Route::middleware('auth')->group(function () {
     
     Route::delete('/announcementsbulkdeletes',[AnnouncementsController::class,'bulkdeletes'])->name("announcements.bulkdeletes");
     Route::resource('/announcements',AnnouncementsController::class);
+
+    Route::delete('/countriesbulkdeletes',[CountriesController::class,'bulkdeletes'])->name("countries.bulkdeletes");
+    Route::resource('/countries',CountriesController::class);
+
+    Route::delete('/regionsbulkdeletes',[RegionsController::class,'bulkdeletes'])->name("regions.bulkdeletes");
+    Route::resource('/regions',RegionsController::class);
+
+    Route::delete('/citiesbulkdeletes',[CitiesController::class,'bulkdeletes'])->name("cities.bulkdeletes");
+    Route::resource('/cities',CitiesController::class);
+
+    Route::delete('/townshipsbulkdeletes',[TownshipsController::class,'bulkdeletes'])->name("townships.bulkdeletes");
+    Route::resource('/townships',TownshipsController::class);
     
     Route::delete('/contactsbulkdeletes',[ContactsController::class,'bulkdeletes'])->name("contacts.bulkdeletes");
     Route::resource('/contacts',ContactsController::class);
@@ -69,6 +85,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/categories',CategoryController::class);
     Route::resource('/days',DayController::class);
+
+    
+
     Route::resource('/genders',GenderController::class);
     Route::resource('/paymenttypes',PaymenttypeController::class);
     Route::resource('/roles',RolesController::class);
