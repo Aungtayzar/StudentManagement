@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\GenderController;
+use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PaymenttypeController;
 use App\Http\Controllers\PostsController;
@@ -75,6 +76,9 @@ Route::middleware('auth')->group(function () {
     
     Route::delete('/contactsbulkdeletes',[ContactsController::class,'bulkdeletes'])->name("contacts.bulkdeletes");
     Route::resource('/contacts',ContactsController::class);
+
+    Route::resource('/leads',LeadsController::class);
+    Route::post('/leads/pipeline/{id}',[LeadsController::class, 'converttostudent'])->name('leads.converttostudent');
 
     Route::resource('/leaves',LeavesController::class);
     Route::put('/leave/{id}/updatestage',[LeavesController::class, 'updatestage'])->name('leaves.updatestage');
