@@ -13,8 +13,8 @@
                             @error('country_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            <select name="country_id" id="country_id" class="form-control form-control-sm rounded-0">
-                                <option value="" disabled>Choose Region</option>
+                            <select name="country_id" id="country_id" class="form-control form-control-sm rounded-0 country_id">
+                                <option value="" selected disabled>Choose Country</option>
                                 @foreach ($countries as $idx=>$name)
                                     <option value="{{$idx}}">{{$name}}</option>
                                 @endforeach
@@ -26,8 +26,8 @@
                             @error('region_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            <select name="region_id" id="region_id" class="form-control form-control-sm rounded-0">
-                                <option value="" disabled>Choose Region</option>
+                            <select name="region_id" id="region_id" class="form-control form-control-sm rounded-0 region_id">
+                                <option value="" selected disabled>Choose Region</option>
                                 {{-- @foreach ($regions as $idx=>$name)
                                     <option value="{{$idx}}">{{$name}}</option>
                                 @endforeach --}}
@@ -36,12 +36,12 @@
 
                         <div class="col-md-2 form-group">
                             <label for="city_id">City</label>
-                            @error('region_id')
+                            @error('city_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            <select name="city_id" id="city_id" class="form-control form-control-sm rounded-0">
-                                <option value="" disabled>Choose City</option>
-                                {{-- @foreach ($regions as $idx=>$name)
+                            <select name="city_id" id="city_id" class="form-control form-control-sm rounded-0 city_id">
+                                <option value="" selected disabled>Choose City</option>
+                                {{-- @foreach ($cities as $idx=>$name)
                                     <option value="{{$idx}}">{{$name}}</option>
                                 @endforeach --}}
                             </select>
@@ -235,6 +235,78 @@
                 });
 
                 // Bulk Delete
+
+                //Start Dyanmic Select Option
+                $(document).on('change','.country_id',function(){
+                    const getcountryid = $(this).val();
+                    // console.log(getcountryid);
+
+                    let opforregion = "";
+                    let opforcity = "";
+
+                    $.ajax({
+                        url:`/api/filter/regions/${getcountryid}`,
+                        type:'GET',
+                        dataType:'json',
+                        success:function(response){
+                            console.log(response);
+                            $('.region_id').empty();
+                            $('.city_id').empty();
+
+                            opforregion += `
+                            <option value="" selected disabled>Choose Region</option>
+                            `;
+                            opforcity += `<option value="" selected disabled>Choose City</option>`
+
+                            for(let x = 0;x < response.data.length;x++){
+                                opforregion += `
+                                <option value="${response.data[x].id}">${response.data[x].name}</option>
+                            `;
+                            }
+
+                            $('.region_id').append(opforregion);
+                            $('.city_id').append(opforcity);
+
+                        },
+                        error:function(){
+                            console.log("Error : ",response);
+                        }
+                    })
+                });
+
+                $(document).on('change','#region_id',function(){
+                    const getregionid = $(this).val();
+                    // console.log(getregionid);
+
+                    let opforregion = "";
+                    let opforcity = "";
+
+                    $.ajax({
+                        url:`/api/filter/cities/${getregionid}`,
+                        type:'GET',
+                        dataType:'json',
+                        success:function(response){
+                            // console.log(response);
+                            // console.log(response.data);
+                            $('.city_id').empty();
+
+                            
+                            opforcity += `<option value="" selected disabled>Choose City</option>`;
+
+                            for(let x = 0;x < response.data.length;x++){
+                                opforcity += `
+                                <option value="${response.data[x].id}">${response.data[x].name}</option>
+                            `;
+                            }
+
+                            $('.city_id').append(opforcity);
+
+                        },
+                        error:function(){
+                            console.log("Error : ",response);
+                        }
+                    })
+                });
 
             })
         </script>

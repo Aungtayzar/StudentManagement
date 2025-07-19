@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Country;
+use App\Models\Region;
 use App\Models\Status;
 use App\Models\Township;
 use Illuminate\Http\Request;
@@ -31,7 +33,6 @@ class TownshipsController extends Controller
         }
 
         $townships = $query->paginate(5)->appends($request->except('page'));
-        // $regions = Region::pluck('name','id');
         $countries = Country::pluck('name','id');
         $statuses = Status::whereIn('id',[3,4])->get();
         return view('townships.index',compact('townships','statuses','countries'));
@@ -53,7 +54,9 @@ class TownshipsController extends Controller
         $this->validate($request,[
             'name'=>'required',
             'status_id'=>'required|in:3,4',
-            'region_id'=>'required|exists:regions,id'
+            'region_id'=>'required|exists:regions,id',
+            'country_id'=>'required|exists:countries,id',
+            'city_id'=>'required|exists:cities,id'
         ]);
         
         $user = Auth::user();
@@ -70,7 +73,7 @@ class TownshipsController extends Controller
 
         $township->save();
 
-        session()->flash("success","New Leave Created");
+        session()->flash("success","New Township Created");
 
        
 
@@ -98,16 +101,25 @@ class TownshipsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        $this->validate($request,[
+            'editname'=>'required'.$id,
+            'editstatus_id'=>'required|in:3,4',
+            'editregion_id'=>'required|exists:regions,id',
+            'editcountry_id'=>'required|exists:countries,id',
+            'editcity_id'=>'required|exists:cities,id'
+        ]);
+
         $user = Auth::user();
         $user_id = $user->id;
 
         $township = Township::findOrFail($id);
-        $township->name = $request['name'];
-        $township->slug = Str::slug($request['name']);
-        $township->country_id = $request['country_id'];
-        $township->region_id = $request['region_id'];
-        $township->city_id = $request['city_id'];
-        $township->status_id = $request['status_id'];
+        $township->name = $request['editname'];
+        $township->slug = Str::slug($request['editname']);
+        $township->country_id = $request['editcountry_id'];
+        $township->region_id = $request['editregion_id'];
+        $township->city_id = $request['editcity_id'];
+        $township->status_id = $request['editstatus_id'];
         $township->user_id = $user_id;
 
         $township->save();

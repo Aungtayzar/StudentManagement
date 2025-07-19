@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CitiesResource;
-use App\Models\City;
+use App\Http\Resources\RegionsCollection;
+use App\Http\Resources\RegionsResource;
+use App\Models\Region;
 use Illuminate\Http\Request;
 
-class CitiesController extends Controller
+class TownshipsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cities = City::all();
-        return CitiesResource::collection($cities);
-        // return new AnnouncementsCollection($announcements);
+        $regions = Region::all();
+        return RegionsResource::collection($regions);
+        // return new RegionsCollection($regions);
     }
 
     /**
@@ -50,8 +51,4 @@ class CitiesController extends Controller
     {
         //
     }
-
-    public function filterbyregionid($filter){
-        return CitiesResource::collection(City::where('region_id',$filter)->where('status_id',3)->orderBy('name','asc')->get());
-    }   
 }
